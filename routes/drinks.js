@@ -2,11 +2,8 @@ var express = require('express');
 var db = require('../settings/db.js');
 var router = express.Router();
 
-
-
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    //res.render('index', { title: 'Express' });
 
     db.all("SELECT * FROM drinks", function (err, rows) {
         if(err) {
@@ -25,8 +22,8 @@ router.post('/', function(req, res) {
     db.run("INSERT INTO drinks (name, price) VALUES(?,?)", name, price);
 
     res.send("");
-});
 
+});
 
 
 module.exports = router;

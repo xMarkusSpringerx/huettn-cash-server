@@ -34,26 +34,60 @@ var allDrinks = [
 
 var usernames = [
     {
-        username: "Markus"
+        username: "Markus",
+        pin: "0000"
     },
     {
-        username: "Sebastian"
+        username: "Sebastian",
+        pin: "0000"
     },
     {
-        username: "Stefan"
+        username: "Stefan",
+        pin: "0000"
     },
     {
-        username: "Korbi"
+        username: "Korbi",
+        pin: "0000"
     },
     {
-        username: "Ente"
+        username: "Ente",
+        pin: "0000"
     }
 ];
+
+var nfcTags = [
+    {
+        userId: 1,
+        nfcTag : "asdlfkjaeoisjdoiwej"
+    },
+    {
+        userId: 2,
+        nfcTag : "wesdweasdf"
+    },
+    {
+        userId: 3,
+        nfcTag : "hrethsfghdsrth"
+    },
+    {
+        userId: 4,
+        nfcTag : "rhsecrtew4tcw4c"
+    },
+    {
+        userId: 5,
+        nfcTag : "q23rq34tcwe5ct"
+    },
+    {
+        userId: 1,
+        nfcTag : "arew34ctweta"
+    }
+];
+
 
 var reset = db.serialize(function () {
 
     db.run('DROP TABLE IF EXISTS drinks');
     db.run('DROP TABLE IF EXISTS users');
+    db.run('DROP TABLE IF EXISTS nfctags');
 
     console.log("------ DRINKS ------");
     // DRINKS
@@ -72,6 +106,15 @@ var reset = db.serialize(function () {
 
         db.run("INSERT INTO users (username) VALUES(?)", elem.username);
         console.log(elem.username + " eingefügt");
+    });
+
+    console.log("------ NFC-TAGS ------");
+
+    db.run('CREATE TABLE nfctags(userId INTEGER, nfctag TEXT NOT NULL,' +
+        'FOREIGN KEY(userId) REFERENCES users(id))');
+    nfcTags.forEach(function (elem) {
+        db.run("INSERT INTO nfctags (userId, nfctag) VALUES(?,?)", elem.userId, elem.nfcTag);
+        console.log("UserId: " + elem.userId + "  mit NFCTag: " + elem.nfcTag + " eingefügt.");
     });
 
 });
