@@ -109,11 +109,11 @@ var reset = db.serialize(function () {
     db.run('DROP TABLE IF EXISTS users');
     db.run('DROP TABLE IF EXISTS nfctags');
     db.run('DROP TABLE IF EXISTS shopping');
-
+    db.run('DROP TABLE IF EXISTS shoppingImages');
 
     console.log("------ DRINKS ------");
     // DRINKS
-    db.run('CREATE TABLE drinks(name NOT NULL, price NOT NULL)');
+    db.run('CREATE TABLE drinks(id INTEGER PRIMARY KEY AUTOINCREMENT,name NOT NULL, price NOT NULL)');
     allDrinks.forEach(function (elem) {
 
         db.run("INSERT INTO drinks (name, price) VALUES(?,?)", elem.name, elem.costs);
@@ -124,7 +124,7 @@ var reset = db.serialize(function () {
 
     console.log("------ USERS ------");
     // USERS
-    db.run('CREATE TABLE users(id INTEGER PRIMARY KEY, username NOT NULL)');
+    db.run('CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, username NOT NULL)');
     usernames.forEach(function (elem) {
 
         db.run("INSERT INTO users (username) VALUES(?)", elem.username);
@@ -135,7 +135,7 @@ var reset = db.serialize(function () {
 
     console.log("------ NFC-TAGS ------");
     // NFC-TAGS
-    db.run('CREATE TABLE nfctags(userId INTEGER, nfctag TEXT NOT NULL,' +
+    db.run('CREATE TABLE nfctags(id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, nfctag TEXT NOT NULL,' +
         'FOREIGN KEY(userId) REFERENCES users(id))');
     nfcTags.forEach(function (elem) {
         db.run("INSERT INTO nfctags (userId, nfctag) VALUES(?,?)", elem.userId, elem.nfcTag);
@@ -144,7 +144,7 @@ var reset = db.serialize(function () {
 
 
     console.log("------ SHOPPING ------");
-    db.run('CREATE TABLE shopping(userId INTEGER, totalCost REAL, date TEXT NOT NULL, ' +
+    db.run('CREATE TABLE shopping(id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, totalCost REAL, date TEXT NOT NULL, ' +
         'FOREIGN KEY(userId) REFERENCES users(id))');
 
     shopping.forEach(function(elem) {
@@ -155,8 +155,13 @@ var reset = db.serialize(function () {
             db.run("INSERT INTO shopping (userId, date) VALUES(?,datetime('now'))", elem.userId);
             console.log("UserId: " + elem.userId + "  hat eingekauft.");
         }
-
     });
+
+
+    console.log("----- SHOPPING-IMAGES ------");
+    db.run('CREATE TABLE shoppingImages(shoppingId INTEGER, fileUrl text, ' +
+        'FOREIGN KEY(shoppingId) REFERENCES shopping(id))');
+
 
 });
 
