@@ -32,14 +32,12 @@ router.post('/', function (req, res) {
 });
 
 
-
-
 /* MIDDLEWARE FOR FILEUPLOAD */
 var storage = multer.diskStorage({
-    destination: function(req, file, callback) {
+    destination: function (req, file, callback) {
         callback(null, 'public/files/shopping/')
     },
-    filename: function(req, file, callback) {
+    filename: function (req, file, callback) {
         callback(null, file.fieldname + '-' + Date.now() + file.originalname)
     }
 });
@@ -48,7 +46,7 @@ var uploading = multer({
     storage: storage,
 });
 
-router.post('/upload', uploading.array('shopping'), function(req, res) {
+router.post('/upload', uploading.array('shopping'), function (req, res) {
 
     console.log(req.files);
     res.send("erfolgreich hochgeladen");
