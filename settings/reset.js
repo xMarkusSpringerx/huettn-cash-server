@@ -82,12 +82,34 @@ var nfcTags = [
     }
 ];
 
+var shopping = [
+    {
+
+        userId: 1,
+        costs: 200
+    },
+    {
+
+        userId: 2,
+        costs: 112.4
+    },
+    {
+
+        userId: 3
+    },
+    {
+
+        userId: 4
+    }
+];
 
 var reset = db.serialize(function () {
 
     db.run('DROP TABLE IF EXISTS drinks');
     db.run('DROP TABLE IF EXISTS users');
     db.run('DROP TABLE IF EXISTS nfctags');
+    db.run('DROP TABLE IF EXISTS shopping');
+
 
     console.log("------ DRINKS ------");
     // DRINKS
@@ -98,8 +120,9 @@ var reset = db.serialize(function () {
         console.log(elem.name + " für " + elem.costs + "€ eingefügt");
     });
 
-    console.log("------ USERS ------");
 
+
+    console.log("------ USERS ------");
     // USERS
     db.run('CREATE TABLE users(id INTEGER PRIMARY KEY, username NOT NULL)');
     usernames.forEach(function (elem) {
@@ -108,13 +131,31 @@ var reset = db.serialize(function () {
         console.log(elem.username + " eingefügt");
     });
 
-    console.log("------ NFC-TAGS ------");
 
+
+    console.log("------ NFC-TAGS ------");
+    // NFC-TAGS
     db.run('CREATE TABLE nfctags(userId INTEGER, nfctag TEXT NOT NULL,' +
         'FOREIGN KEY(userId) REFERENCES users(id))');
     nfcTags.forEach(function (elem) {
         db.run("INSERT INTO nfctags (userId, nfctag) VALUES(?,?)", elem.userId, elem.nfcTag);
         console.log("UserId: " + elem.userId + "  mit NFCTag: " + elem.nfcTag + " eingefügt.");
+    });
+
+
+    console.log("------ SHOPPING ------");
+    db.run('CREATE TABLE shopping(userId INTEGER, totalCost REAL, date TEXT NOT NULL, ' +
+        'FOREIGN KEY(userId) REFERENCES users(id))');
+
+    shopping.forEach(function(elem) {
+        if(elem.costs) {
+            db.run("INSERT INTO shopping (userId, date, totalCost) VALUES(?,datetime('now'),?)", elem.userId, elem.costs);
+            console.log("UserId: " + elem.userId + "  hat für " + elem.costs + "€ eingekauft.");
+        } else {
+            db.run("INSERT INTO shopping (userId, date) VALUES(?,datetime('now'))", elem.userId);
+            console.log("UserId: " + elem.userId + "  hat eingekauft.");
+        }
+
     });
 
 });

@@ -6,9 +6,11 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var db = require('./settings/db.js');
 
+/* ROUTES */
 var index = require('./routes/index');
 var drinks = require('./routes/drinks');
 var users = require('./routes/users');
+var shopping = require('./routes/shopping');
 
 var reset = require('./settings/reset');
 
@@ -57,7 +59,7 @@ db.serialize(function () {
 app.use('/', index);
 app.use('/drinks', drinks);
 app.use('/users', users);
-
+app.use('/shopping', shopping);
 
 
 // catch 404 and forward to error handler

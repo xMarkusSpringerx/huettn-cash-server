@@ -7,5 +7,4 @@ for line in sys.stdin:
   test = line[:-1]
 
 
-
 print "ischisch"
