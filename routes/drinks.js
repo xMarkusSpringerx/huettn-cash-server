@@ -22,8 +22,8 @@ router.post('/', function(req, res) {
     db.run("INSERT INTO drinks (name, price) VALUES(?,?)", name, price);
 
     res.send("");
-
 });
+
 
 
 module.exports = router;

@@ -47,9 +47,9 @@ var uploading = multer({
 });
 
 router.post('/upload', uploading.array('shopping'), function (req, res) {
-
     console.log(req.files);
     res.send("erfolgreich hochgeladen");
 });
+
 
 module.exports = router;

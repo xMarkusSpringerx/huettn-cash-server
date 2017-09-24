@@ -11,6 +11,7 @@ var index = require('./routes/index');
 var drinks = require('./routes/drinks');
 var users = require('./routes/users');
 var shopping = require('./routes/shopping');
+var purchases = require('./routes/purchases');
 
 var reset = require('./settings/reset');
 
@@ -59,6 +60,7 @@ app.use('/', index);
 app.use('/drinks', drinks);
 app.use('/users', users);
 app.use('/shopping', shopping);
+app.use('/purchases', purchases);
 
 
 // catch 404 and forward to error handler

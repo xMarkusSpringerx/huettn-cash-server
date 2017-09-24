@@ -103,6 +103,60 @@ var shopping = [
     }
 ];
 
+var drinksPurchased = [
+    {
+        userId : 1,
+        drinkId : 1,
+        paid : 0
+    },
+    {
+        userId : 1,
+        drinkId : 2,
+        paid : 0
+    },
+    {
+        userId : 1,
+        drinkId : 2,
+        paid : 1
+    },
+    {
+        userId : 1,
+        drinkId : 3,
+        paid : 1
+    },
+    {
+        userId : 2,
+        drinkId : 5,
+        paid : 0
+    },
+    {
+        userId : 2,
+        drinkId : 4,
+        paid : 1
+    },
+    {
+        userId : 3,
+        drinkId : 3,
+        paid : 0
+    },
+    {
+        userId : 3,
+        drinkId : 1,
+        paid : 0
+    },
+    {
+        userId : 4,
+        drinkId : 2,
+        paid : 1
+    },
+    {
+        userId : 5,
+        drinkId : 2,
+        paid : 1
+    }
+];
+
+
 var reset = db.serialize(function () {
 
     db.run('DROP TABLE IF EXISTS drinks');
@@ -110,6 +164,8 @@ var reset = db.serialize(function () {
     db.run('DROP TABLE IF EXISTS nfctags');
     db.run('DROP TABLE IF EXISTS shopping');
     db.run('DROP TABLE IF EXISTS shoppingImages');
+    db.run('DROP TABLE IF EXISTS drinksPurchased');
+
 
     console.log("------ DRINKS ------");
     // DRINKS
@@ -130,8 +186,6 @@ var reset = db.serialize(function () {
         db.run("INSERT INTO users (username) VALUES(?)", elem.username);
         console.log(elem.username + " eingefügt");
     });
-
-
 
     console.log("------ NFC-TAGS ------");
     // NFC-TAGS
@@ -159,8 +213,20 @@ var reset = db.serialize(function () {
 
 
     console.log("----- SHOPPING-IMAGES ------");
-    db.run('CREATE TABLE shoppingImages(shoppingId INTEGER, fileUrl text, ' +
+    db.run('CREATE TABLE shoppingImages(id INTEGER PRIMARY KEY AUTOINCREMENT, shoppingId INTEGER, fileUrl text, ' +
         'FOREIGN KEY(shoppingId) REFERENCES shopping(id))');
+
+
+    console.log("----- DRINKS-PURCHASED ------");
+    db.run('CREATE TABLE drinksPurchased(id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT NOT NULL, userId INTEGER NOT NULL, drinkId INTEGER NOT NULL, paid INTEGER DEFAULT 0, ' +
+        'FOREIGN KEY(userId) REFERENCES users(id),' +
+        'FOREIGN KEY(drinkId) REFERENCES drinks(id))');
+
+    drinksPurchased.forEach(function(elem) {
+        db.run("INSERT INTO drinksPurchased (date, userid, drinkId, paid) VALUES(datetime('now'),?,?,?)", elem.userId, elem.drinkId, elem.paid);
+    });
+
+
 
 
 });
